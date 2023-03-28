@@ -1,0 +1,198 @@
+.chatpage_page_wrapper{
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.chatpage-sidebar-wrapper{
+    width: clamp(150px, 20%, 300px);
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background-color: var(--main-color);
+}
+
+.chatpage-sidebar-wrapper > button{
+    margin: 12%;
+    padding: 10px;
+
+    color: white;
+
+    font-family: inherit;
+    font-weight: 500;
+    font-size: var(--medium-size);
+
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.chatpage-sidebar-wrapper > div{
+    padding: 12%;
+
+    display: flex;
+    flex-direction: column;
+
+    border-top: 1px solid #F5F6FA;
+}
+
+.chatpage-sidebar-wrapper > div > *{
+    margin: 5% 0%;
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.chatpage-sidebar-wrapper > div > a{
+    text-decoration: none;
+}
+
+.chatpage-sidebar-wrapper > div > button{
+    padding: 10px;
+
+    color: black;
+
+    font-family: inherit;
+
+    border: none;
+    border-radius: 5px;
+}
+
+#cp-main{
+    width:  max(calc(100% - 250px), 80%);
+    height: 100%;
+}
+
+.cp-main-wrapper{
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.cp-main-wrapper > div:first-child{
+    height: 75px;
+    padding: 2% max(35px, 5%);
+}
+
+.cp-main-wrapper > div:first-child > h1{
+    margin: 0px;
+
+    font-size: var(--large-size);
+    color: var(--main-color);
+}
+
+.cp-main-wrapper > div:first-child > p{
+    margin: 0px;
+
+    font-size: 15px;
+    color: var(--subheading-gray);
+}
+
+.cp-chat-container{
+    position: relative;
+
+    width: 90%;
+    height: calc(100% - 70px - 2%);
+    padding: 3% 5%;
+
+    background-color: var(--secondary-color);
+}
+
+#cp-recommendation-wrapper > h2{
+    margin: 1% 0% max(20px, 3%) 0%;
+
+    font-size: var(--xx-large-size);
+}
+
+#cp-recommendation-wrapper > div{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 2%;
+}
+
+.cp-recommendation-article{
+    width: 40%;
+    padding: 1% 2%;
+    margin-bottom: 2%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    font-weight: 800;
+
+    background-color: white;
+    border-radius: 25px;
+
+    transition: .5s;
+}
+
+.cp-recommendation-article:hover{
+    cursor: pointer;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.cp-recommendation-article > svg{
+    margin: 0px 5px;
+}
+
+.cp-input-wrapper{
+    position: absolute;
+    bottom: 0;
+
+    width: 90%;
+    margin-bottom: 2%;
+}
+
+.cp-input-wrapper > form{
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.cp-input-wrapper > form > input{
+    width: 77%;
+    padding: 20px 24px;
+
+    color: var(--subheading-gray);
+
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 500;
+
+    border: none;
+    border-radius: 15px;
+}
+
+.cp-input-wrapper > form > button{
+    width: 55px;
+    height: 55px;
+    margin: 0% 2% ;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: inherit;
+    color: white;
+
+    border: none;
+    border-radius: 100%;
+    background-color: var(--contrast-blue);
+
+}
+
+.cp-input-wrapper > form > button > img{
+    width: 30px;
+    padding-left: 5px;
+}
