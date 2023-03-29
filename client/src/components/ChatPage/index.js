@@ -1,8 +1,28 @@
+import { useState } from 'react';
 import ChatBubble from '../ChatBubbles';
 import './chatpage.css'
 
 export default function ChatPage (){
+    const [currentMessage, setCurrentMessage] = useState("")
     let messages = true;
+
+    const handleMessage = (e) => {
+        e.preventDefault();
+
+        fetch("http://localhost:3005/chat/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                content: currentMessage
+            })
+        }).then((res) => res.json())
+        .then((data) => console.log(data))
+
+        console.log("Sent Message")
+        setCurrentMessage("")
+    }
 
     return (
         <div className="chatpage_page_wrapper">
@@ -64,8 +84,14 @@ export default function ChatPage (){
                         }
 
                         <div className="cp-input-wrapper">
-                            <form>
-                                <input type="text" placeholder="Ask RealAssist Something..."></input>
+                            <form onSubmit={handleMessage}>
+                                <input
+                                    type="text"
+                                    placeholder="Ask RealAssist Something..."
+                                    value={currentMessage}
+                                    onChange={(e) => setCurrentMessage(e.target.value)}
+                                    required
+                                />
 
                                 <button type="submit">
                                     <img src="/arrow-icon.png" alt="Arrow" />

@@ -177,14 +177,16 @@
     width: 77%;
     padding: 20px 24px;
 
-    color: var(--subheading-gray);
-
     font-family: inherit;
     font-size: 18px;
     font-weight: 500;
 
     border: none;
     border-radius: 15px;
+}
+
+.cp-input-wrapper > form > input::placeholder{
+    color: var(--subheading-gray);
 }
 
 .cp-input-wrapper > form > button{
