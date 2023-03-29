@@ -3,24 +3,28 @@ import ChatBubble from '../ChatBubbles';
 import './chatpage.css'
 
 export default function ChatPage (){
+    const [chatLog, setChatLog] = useState([])
     const [currentMessage, setCurrentMessage] = useState("")
     let messages = true;
 
-    const handleMessage = (e) => {
+    const handleMessage = async (e) => {
         e.preventDefault();
 
+        const newChatLog = [...chatLog, {role: 'user', content: currentMessage}]
+        setChatLog([...newChatLog])
+        console.log(`This is chat log send: ${newChatLog}`)
         fetch("http://localhost:3005/chat/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                content: currentMessage
+                messagesContent: newChatLog
             })
         }).then((res) => res.json())
         .then((data) => console.log(data))
 
-        console.log("Sent Message")
+        console.log("handle message ended")
         setCurrentMessage("")
     }
 
@@ -90,7 +94,7 @@ export default function ChatPage (){
                                     placeholder="Ask RealAssist Something..."
                                     value={currentMessage}
                                     onChange={(e) => setCurrentMessage(e.target.value)}
-                                    required
+                                    // required
                                 />
 
                                 <button type="submit">
