@@ -3,53 +3,74 @@ const router = express.Router();
 const axios = require('axios');
 
 router.post('/', (req, res) => {
-    try{
+
+    // async function moderateResponse(messages){
+    //     const modResponse = await axios.post('https://api.openai.com/v1/moderations',{
+    //         input: messages[messages.length - 1].content
+    //     },
+    //         {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 "Authorization": `Bearer ${process.env.OPENAI_KEY}`
+    //             }
+    //     })
+    //     const results = await modResponse.data.results[0].flagged;
+
+    //     if(results) return false;
+
+    //     return true;
+    // }
+
+    // moderateResponse(messagesArr).then((passedModeration) => {
+    //     if(!passedModeration){
+    //         res.json({
+    //             error: "Did not pass moderation"
+    //         })
+    //     }else{
+    //         console.log("Passed moderation test!")
+    //     }
+    // })
+
+    (async function(){
+
         if(!process.env.OPENAI_KEY){
-            console.log("No api key")
-            throw new Error('No OPENAI_KEY env variable set')
+            res.json({error: 'No OPENAI_KEY env variable set'})
+            return false;
         }
 
         const { messagesContent } = req.body;
-        console.log(`This is content received`, messagesContent)
-
-        // if(!data){
-        //     throw new Error('No body received')
-        // }
-
         const messagesArr = messagesContent;
+        console.log("Receiving this:", messagesArr)
 
-        if(!messagesArr){
-            throw new Error('No message data provided, please try again')
+        if(messagesArr.length  < 1 || !messagesArr[messagesArr.length - 1].content){
+            res.json({error: 'No message data provided, please try again'})
+            return false;
         }
 
-        //MODERATE RESULTS AS FOR OPENAI DOCUMENTATION
+         //MODERATE RESULTS AS FOR OPENAI DOCUMENTATION
 
-        async function moderateResponse(messages){
-            const modResponse = await axios.post('https://api.openai.com/v1/moderations',{
-                input: messages[messages.length - 1].content
-            },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${process.env.OPENAI_KEY}`
-                    }
-            })
-            const results = await modResponse.data.results[0].flagged;
-
-            if(results) return false;
-
-            return true;
-        }
-
-        moderateResponse(messagesArr).then((passedModeration) => {
-            if(!passedModeration){
-                res.json({
-                    error: "Did not pass moderation"
-                })
-            }else{
-                console.log("Passed moderation test!")
-            }
+        const modResponse = await axios.post('https://api.openai.com/v1/moderations',{
+            input: messagesArr[messagesArr.length - 1].content
+        },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${process.env.OPENAI_KEY}`
+                }
         })
+
+        //true if flagged, false if not
+        const modResults = await modResponse.data.results[0].flagged;
+
+        if(modResults){
+            res.json({
+                error: "Did not pass moderation"
+            })
+            return false
+        }else{
+            //TAKE THIS OFF FOR PRODUCTION
+            console.log("Passed moderation test!")
+        }
 
         const prompt = 'You are a virtual assistant for a company called RealAssist.AI that focuses on Real Estate.'
         const messages = [{role: 'system', content: prompt}, ...messagesArr]
@@ -60,32 +81,30 @@ router.post('/', (req, res) => {
             temperature: 0.8,
         }
 
-        throw new Error("STOP HERE")
+        const chatResults = await axios.post(`https://api.openai.com/v1/chat/completions`,
+        JSON.stringify(chatOptions),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${process.env.OPENAI_KEY}`
+                }
+        })
 
-        async function chatFetch(chatOps){
-            const chatResults = await fetch(`https://api.openai.com/v1/chat/completions`,{
-                headers:{
-                    Authorization: `Bearer ${process.env.OPENAI_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                body: JSON.stringify(chatOps)
-            })
 
-            if(!chatResults.ok){
-                console.log("CHAT RESULTS NOT OKAY")
-            }
+        if(! (await chatResults.ok)){
 
-            return chatResults;
+            console.log("CHAT RESULTS NOT OKAY", chatResults.ok)
         }
 
-        console.log(chatFetch(chatOptions));
+        let finalResults = chatResults.data.choices
 
-    }catch(err){
-        console.log(`ERROR: ${err}`)
-    }
+        if(finalResults){
+            res.json(finalResults[0])
+            return true
+        }
 
-    // res.json("You are in the chat route")
+
+    }())
 })
 
 module.exports = router;
