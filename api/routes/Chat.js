@@ -61,7 +61,6 @@ router.post('/', (req, res) => {
         })
 
 
-
         let finalResults = chatResults.data.choices
 
         if(finalResults){

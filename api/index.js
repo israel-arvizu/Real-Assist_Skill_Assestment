@@ -15,17 +15,5 @@ mongoose.connect(process.env.URI, {
     useUnifiedTopology: true
 }).then(() => console.log("Connected to Database")).catch(console.error);
 
-const User = require('./models/user');
 
-app.get('/', async (req, res)=> {
-    res.json("Hitting the initial route")
-})
-
-app.get('/user', async (req, res)=> {
-    const user = await User.find();
-
-    res.json(User)
-})
-
-
-app.listen(3005, () => console.log("Server started on port 3005"));
+app.listen(3005, () => console.log(`Server started on port ${process.env.PORT}`));

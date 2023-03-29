@@ -1,18 +1,25 @@
 import { useState, useEffect, useRef} from 'react';
 import ChatBubble from '../ChatBubbles';
+import ReccommendationBubbles from '../RecommendationBubbles';
 import './chatpage.css'
 
 export default function ChatPage (){
+    const [interactions, setInteractions] = useState([])
     const [chatLog, setChatLog] = useState([])
     const [currentMessage, setCurrentMessage] = useState("")
     const [typing, setTyping] = useState(false)
+    const [inputText, setInputText] = useState("Ask RealAssist Something...")
     const [errors, setErrors] = useState("")
     const messagesEndRef = useRef();
     let typingTimeout = null;
 
     useEffect(() => {
         autoScroll()
+        if(chatLog.length > 0){
+            setInteractions([[chatLog]])
+        }
     }, [chatLog])
+
 
     function autoScroll(){
         messagesEndRef.current?.scrollIntoView({behavior: 'smooth', block: 'end', inline: 'nearest'})
@@ -21,9 +28,13 @@ export default function ChatPage (){
     const handleMessage = async (e) => {
         e.preventDefault();
         setErrors("")
+        setInputText("Message...")
 
         const newMessage = {role: 'user', content: currentMessage}
 
+        if(!currentMessage){
+            return
+        }
         const newChatLog = [...chatLog, newMessage]
 
         setChatLog(newChatLog)
@@ -53,6 +64,7 @@ export default function ChatPage (){
                 setTyping(false)
                 setErrors(data.error.message)
             }else{
+                clearTimeout(typingTimeout)
                 setTyping(false)
                 setChatLog([...chatMessages, data.message])
             }
@@ -64,32 +76,52 @@ export default function ChatPage (){
         switch(promptChoice){
             case 1:
                 newChatLog = [{role: 'user', content: 'Create blog content specific to real estate'}]
-                setChatLog(newChatLog)
-                processData(newChatLog)
                 break;
             case 2:
                 newChatLog = [{role: 'user', content: 'Give me creative ideas to reach out to new customers'}]
-                setChatLog(newChatLog)
-                processData(newChatLog)
                 break;
             case 3:
                 newChatLog = [{role: 'user', content: 'How do I create a email drop campaign content for my clients'}]
-                setChatLog(newChatLog)
-                processData(newChatLog)
                 break;
             case 4:
                 newChatLog = [{role: 'user', content: 'Can you write an anwser to my clients email'}]
-                setChatLog(newChatLog)
-                processData(newChatLog)
                 break;
+            default:
+                return
         }
+        typingTimeout = setTimeout(() => {
+            setTyping(true)
+        }, 300)
+        setChatLog(newChatLog)
+        processData(newChatLog)
         return;
+    }
+
+    function restartChat(){
+        setErrors("")
+        setChatLog([])
+        setInteractions([])
+        setInputText("Ask RealAssist Something...")
     }
 
     return (
         <div className="chatpage_page_wrapper">
             <div className="chatpage-sidebar-wrapper">
-                <button> New Chat </button>
+                <div className='top-sidebar-content'>
+                    <button onClick={restartChat}> New Chat </button>
+                    {interactions?.length >= 1 ?
+                    <div className="interactions-wrapper">
+                        {/* To be implemented when we fetch the users past chats */}
+                        {interactions?.map((chatInteraction) =>{
+                            return(
+                                <div>
+                                    <p>New Chat Created...</p>
+                                </div>
+                            )
+                        })}
+                    </div>
+                    : null}
+                </div>
                 <div>
                     <a href="/">Account</a>
                     <a href="/">Contact Us</a>
@@ -119,48 +151,16 @@ export default function ChatPage (){
                             <div ref={messagesEndRef}/>
                             </div>
                          :
-                            <div id="cp-recommendation-wrapper">
-                                <h2>Example of types of questions to ask RealAssist</h2>
-                                <div>
-                                    <article className="cp-recommendation-article" onClick={() => quickPrompt(1)}>
-                                        <p>Creating blog content specific to real estate</p>
-                                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M17.7071 6.29289C18.0976 6.68342 18.0976 7.31658 17.7071 7.70711L7.70711 17.7071C7.31658 18.0976 6.68342 18.0976 6.29289 17.7071C5.90237 17.3166 5.90237 16.6834 6.29289 16.2929L16.2929 6.29289C16.6834 5.90237 17.3166 5.90237 17.7071 6.29289Z" fill="#443DF6"/>
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M6 7C6 6.44772 6.44772 6 7 6H17C17.5523 6 18 6.44772 18 7V17C18 17.5523 17.5523 18 17 18C16.4477 18 16 17.5523 16 17V8H7C6.44772 8 6 7.55228 6 7Z" fill="#443DF6"/>
-                                        </svg>
-                                    </article>
-                                    <article className="cp-recommendation-article" onClick={() => quickPrompt(2)}>
-                                        <p>Creative ideas to reach out to new customers</p>
-                                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M17.7071 6.29289C18.0976 6.68342 18.0976 7.31658 17.7071 7.70711L7.70711 17.7071C7.31658 18.0976 6.68342 18.0976 6.29289 17.7071C5.90237 17.3166 5.90237 16.6834 6.29289 16.2929L16.2929 6.29289C16.6834 5.90237 17.3166 5.90237 17.7071 6.29289Z" fill="#443DF6"/>
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M6 7C6 6.44772 6.44772 6 7 6H17C17.5523 6 18 6.44772 18 7V17C18 17.5523 17.5523 18 17 18C16.4477 18 16 17.5523 16 17V8H7C6.44772 8 6 7.55228 6 7Z" fill="#443DF6"/>
-                                        </svg>
-                                    </article>
-                                    <article className="cp-recommendation-article" onClick={() => quickPrompt(3)}>
-                                        <p>Creating email drop campaign content for your clients</p>
-                                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M17.7071 6.29289C18.0976 6.68342 18.0976 7.31658 17.7071 7.70711L7.70711 17.7071C7.31658 18.0976 6.68342 18.0976 6.29289 17.7071C5.90237 17.3166 5.90237 16.6834 6.29289 16.2929L16.2929 6.29289C16.6834 5.90237 17.3166 5.90237 17.7071 6.29289Z" fill="#443DF6"/>
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M6 7C6 6.44772 6.44772 6 7 6H17C17.5523 6 18 6.44772 18 7V17C18 17.5523 17.5523 18 17 18C16.4477 18 16 17.5523 16 17V8H7C6.44772 8 6 7.55228 6 7Z" fill="#443DF6"/>
-                                        </svg>
-                                    </article>
-                                    <article className="cp-recommendation-article" onClick={() => quickPrompt(4)}>
-                                        <p>Writing anwsers to your clients text/emails</p>
-                                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M17.7071 6.29289C18.0976 6.68342 18.0976 7.31658 17.7071 7.70711L7.70711 17.7071C7.31658 18.0976 6.68342 18.0976 6.29289 17.7071C5.90237 17.3166 5.90237 16.6834 6.29289 16.2929L16.2929 6.29289C16.6834 5.90237 17.3166 5.90237 17.7071 6.29289Z" fill="#443DF6"/>
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M6 7C6 6.44772 6.44772 6 7 6H17C17.5523 6 18 6.44772 18 7V17C18 17.5523 17.5523 18 17 18C16.4477 18 16 17.5523 16 17V8H7C6.44772 8 6 7.55228 6 7Z" fill="#443DF6"/>
-                                        </svg>
-                                    </article>
-                                </div>
-                            </div>
+                            <ReccommendationBubbles quickPrompt={quickPrompt}/>
                         }
-
                         <div className="cp-input-wrapper">
                             <form onSubmit={handleMessage}>
                                 <input
                                     type="text"
-                                    placeholder="Ask RealAssist Something..."
+                                    placeholder={inputText}
                                     value={currentMessage}
                                     onChange={(e) => setCurrentMessage(e.target.value)}
+                                    required
                                 />
 
                                 <button type="submit">

@@ -1,0 +1,42 @@
+#cp-recommendation-wrapper{
+    margin: 0% 5%;
+}
+
+#cp-recommendation-wrapper > h2{
+    margin: 1% 0% max(20px, 3%) 0%;
+
+    font-size: var(--xx-large-size);
+}
+
+#cp-recommendation-wrapper > div{
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 2%;
+}
+
+.cp-recommendation-article{
+    width: 40%;
+    padding: 1% 2%;
+    margin-bottom: 2%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    font-weight: 800;
+
+    background-color: white;
+    border-radius: 25px;
+
+    transition: .5s;
+}
+
+.cp-recommendation-article:hover{
+    cursor: pointer;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.cp-recommendation-article > svg{
+    margin: 0px 5px;
+}

@@ -17,7 +17,10 @@
     background-color: var(--main-color);
 }
 
-.chatpage-sidebar-wrapper > button{
+
+
+.top-sidebar-content >  button{
+    width: 76%;
     margin: 12%;
     padding: 10px;
 
@@ -32,7 +35,17 @@
     border-radius: 10px;
 }
 
-.chatpage-sidebar-wrapper > div{
+.interactions-wrapper > div{
+    background-color: rgba(218, 218, 218, 0.13);
+    padding: 4% 5%;
+}
+
+.interactions-wrapper > div > p{
+    color: white;
+    font-size: 13px;
+}
+
+.chatpage-sidebar-wrapper > div:last-child{
     padding: 12%;
 
     display: flex;
@@ -41,7 +54,7 @@
     border-top: 1px solid #F5F6FA;
 }
 
-.chatpage-sidebar-wrapper > div > *{
+.chatpage-sidebar-wrapper > div:last-child > *{
     margin: 5% 0%;
 
     color: white;
@@ -50,11 +63,11 @@
     font-weight: 600;
 }
 
-.chatpage-sidebar-wrapper > div > a{
+.chatpage-sidebar-wrapper > div:last-child > a{
     text-decoration: none;
 }
 
-.chatpage-sidebar-wrapper > div > button{
+.chatpage-sidebar-wrapper > div:last-child > button{
     padding: 10px;
 
     color: black;
@@ -107,49 +120,6 @@
     overflow-y: hidden;
 
     background-color: var(--secondary-color);
-}
-
-#cp-recommendation-wrapper{
-    margin: 0% 5%;
-}
-
-#cp-recommendation-wrapper > h2{
-    margin: 1% 0% max(20px, 3%) 0%;
-
-    font-size: var(--xx-large-size);
-}
-
-#cp-recommendation-wrapper > div{
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 2%;
-}
-
-.cp-recommendation-article{
-    width: 40%;
-    padding: 1% 2%;
-    margin-bottom: 2%;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    font-weight: 800;
-
-    background-color: white;
-    border-radius: 25px;
-
-    transition: .5s;
-}
-
-.cp-recommendation-article:hover{
-    cursor: pointer;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-}
-
-.cp-recommendation-article > svg{
-    margin: 0px 5px;
 }
 
 .cp-chat-bubble-container{
