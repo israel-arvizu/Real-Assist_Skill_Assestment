@@ -3,48 +3,20 @@ const router = express.Router();
 const axios = require('axios');
 
 router.post('/', (req, res) => {
-
-    // async function moderateResponse(messages){
-    //     const modResponse = await axios.post('https://api.openai.com/v1/moderations',{
-    //         input: messages[messages.length - 1].content
-    //     },
-    //         {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 "Authorization": `Bearer ${process.env.OPENAI_KEY}`
-    //             }
-    //     })
-    //     const results = await modResponse.data.results[0].flagged;
-
-    //     if(results) return false;
-
-    //     return true;
-    // }
-
-    // moderateResponse(messagesArr).then((passedModeration) => {
-    //     if(!passedModeration){
-    //         res.json({
-    //             error: "Did not pass moderation"
-    //         })
-    //     }else{
-    //         console.log("Passed moderation test!")
-    //     }
-    // })
-
     (async function(){
 
         if(!process.env.OPENAI_KEY){
-            res.json({error: 'No OPENAI_KEY env variable set'})
+            res.json({error: {message: 'No OPENAI_KEY env variable set'}})
             return false;
         }
 
         const { messagesContent } = req.body;
         const messagesArr = messagesContent;
-        console.log("Receiving this:", messagesArr)
 
         if(messagesArr.length  < 1 || !messagesArr[messagesArr.length - 1].content){
-            res.json({error: 'No message data provided, please try again'})
-            return false;
+            console.log("fell into error")
+            res.json({error: {message: 'No message data provided, please add some input'}})
+            return;
         }
 
          //MODERATE RESULTS AS FOR OPENAI DOCUMENTATION
@@ -63,13 +35,8 @@ router.post('/', (req, res) => {
         const modResults = await modResponse.data.results[0].flagged;
 
         if(modResults){
-            res.json({
-                error: "Did not pass moderation"
-            })
-            return false
-        }else{
-            //TAKE THIS OFF FOR PRODUCTION
-            console.log("Passed moderation test!")
+            res.json({error: {message: "Did not pass moderation"}})
+            return;
         }
 
         const prompt = 'You are a virtual assistant for a company called RealAssist.AI that focuses on Real Estate.'
@@ -88,13 +55,12 @@ router.post('/', (req, res) => {
                     'Content-Type': 'application/json',
                     "Authorization": `Bearer ${process.env.OPENAI_KEY}`
                 }
+        }).catch(function (error){
+            res.json({error: error.toJSON()})
+            return;
         })
 
 
-        if(! (await chatResults.ok)){
-
-            console.log("CHAT RESULTS NOT OKAY", chatResults.ok)
-        }
 
         let finalResults = chatResults.data.choices
 

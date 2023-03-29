@@ -159,6 +159,10 @@
     overflow-y: scroll;
 }
 
+.cp-chat-bubble-container::-webkit-scrollbar {
+    display: none;
+  }
+
 .cp-input-wrapper{
     position: absolute;
     bottom: 0;

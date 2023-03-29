@@ -8,6 +8,13 @@ export default function ChatBubble({type, content}){
                 <p className="chat-time">8:30pm</p>
             </div>
         )
+    }else if(type === "error"){
+        return (
+            <div className="chat-wrapper error-wrapper">
+                <p>{content}</p>
+                <p className="chat-time">8:30pm</p>
+            </div>
+        )
     }else{
         return (
             <div className="chat-wrapper bot-wrapper">
