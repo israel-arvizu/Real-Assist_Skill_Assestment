@@ -13,6 +13,10 @@
     background-color: #faf9fc;
 }
 
+.error-wrapper > p:first-child{
+    color: red;
+}
+
 .chat-time{
     font-size: 13px;
     color: var(--subheading-gray);
