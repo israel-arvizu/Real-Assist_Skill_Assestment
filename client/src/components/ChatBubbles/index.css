@@ -1,0 +1,20 @@
+.chat-wrapper{
+    width: 90%;
+    height: fit-content;
+    padding: 8px 5%;
+    margin: 8px 0px;
+}
+
+.human-wrapper{
+    background-color: white;
+}
+
+.bot-wrapper{
+    background-color: #faf9fc;
+}
+
+.chat-time{
+    font-size: 13px;
+    color: var(--subheading-gray);
+    margin-top: 0px;
+}
